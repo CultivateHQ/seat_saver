@@ -22,17 +22,12 @@ type alias Model =
 
 initialModel : (Model, Effects Action)
 initialModel =
-  let
-    seats = [ {seatNo = 1, occupied = True}
-            , {seatNo = 2, occupied = False}
-            ]
-  in
-    (seats, Effects.none)
+  ([], Effects.none)
 
 
 -- UPDATE
 
-type Action = NoOp
+type Action = NoOp | Refresh Model
 
 
 update : Action -> Model -> (Model, Effects Action)
@@ -40,6 +35,8 @@ update action model =
   case action of
     NoOp ->
       (model, Effects.none)
+    Refresh seats ->
+      (seats, Effects.none)
 
 
 -- VIEW
@@ -54,6 +51,18 @@ seatItem address seat =
   li [ ] [ text (toString seat) ]
 
 
+-- PORTS
+
+port initialSeats : Signal Model
+
+
+-- SIGNAL
+
+incomingActions: Signal Action
+incomingActions =
+  Signal.map Refresh initialSeats
+
+
 -- WIRING
 
 app : App Model
@@ -62,7 +71,7 @@ app =
     { init = initialModel
     , update = update
     , view = view
-    , inputs = []
+    , inputs = [incomingActions]
     }
 
 
