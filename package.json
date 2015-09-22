@@ -3,6 +3,7 @@
   },
   "dependencies": {
     "brunch": "^1.8.5",
+    "elm-brunch": "^0.3.0",
     "babel-brunch": "^5.1.1",
     "clean-css-brunch": ">= 1.0 < 1.8",
     "css-brunch": ">= 1.0 < 1.8",
