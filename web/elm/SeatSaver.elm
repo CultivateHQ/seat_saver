@@ -43,12 +43,12 @@ update action model =
 
 view : Signal.Address Action -> Model -> Html
 view address model =
-  ul [ ] ( List.map (seatItem address) model )
+  ul [ class "seats" ] ( List.map (seatItem address) model )
 
 
 seatItem : Signal.Address Action -> Seat -> Html
 seatItem address seat =
-  li [ ] [ text (toString seat) ]
+  li [ class "seat available" ] [ text (toString seat.seatNo) ]
 
 
 -- PORTS

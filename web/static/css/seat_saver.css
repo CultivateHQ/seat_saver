@@ -1,0 +1,49 @@
+* { font-family: sans-serif;}
+
+.hidden {display: none;}
+
+h2.header {
+  text-align: center;
+  margin-bottom: 1em;
+  border-bottom: none;
+  width: 92%;
+}
+
+#elm-main {
+  padding: 1em 10em;
+  background: #DDD;
+  border: 1px solid #CCC;
+  border-radius: 300px/50px;
+  display: inline-block;
+}
+
+.seats {
+  list-style: none;
+  margin: 0;
+  padding: 1em 1em 0.5em 1em;
+  border: 1px solid #CCC;
+  border-radius: 5px;
+  zoom: 1;
+  overflow: auto;
+  display: inline-block;
+  background: white;
+}
+
+.seat {
+  width: 50px;
+  height: 50px;
+  float: left;
+  margin: 0 0 2em 0.5em;
+  text-align: center;
+}
+
+.seat:before {
+  position: relative;
+  content: url(../images/seat.png);
+}
+
+.available { background: #AAA; }
+.occupied  { background: #99cc33; }
+
+/* Assumes 12 seats! */
+.seat:nth-child(6n+1) { clear: both}

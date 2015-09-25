@@ -20,10 +20,11 @@ import "deps/phoenix_html/web/static/js/phoenix_html"
 
 import socket from "./socket"
 
-var elmDiv = document.getElementById('elm-main')
-  , elmApp = Elm.embed(Elm.SeatSaver, elmDiv, {initialSeats: []});
+let elmDiv = document.getElementById('elm-main')
+  , initialState = {initialSeats: []}
+  , elmApp = Elm.embed(Elm.SeatSaver, elmDiv, initialState)
 
 let channel = socket.channel("seats:planner", {})
 channel.join()
-  .receive("ok", seats => { elmApp.ports.initialSeats.send(seats); })
-  .receive("error", resp => { console.log("Unable to join", resp) })
+  .receive("ok", seats => elmApp.ports.initialSeats.send(seats))
+  .receive("error", resp => console.log("Unable to join", resp))
