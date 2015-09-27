@@ -28,7 +28,7 @@ initialModel =
 
 -- UPDATE
 
-type Action = NoOp | SetSeats Model | RequestSeat Seat
+type Action = NoOp | SetSeats Model | RequestSeat Seat | UpdateSeat Seat
 
 
 update : Action -> Model -> (Model, Effects Action)
@@ -40,6 +40,12 @@ update action model =
       (seats, Effects.none)
     RequestSeat seat ->
       (model, sendSeatRequest seat)
+    UpdateSeat seat ->
+      let
+        updateSeat s =
+          if s.seatNo == seat.seatNo then { s | occupied <- seat.occupied } else s
+      in
+        (List.map updateSeat model, Effects.none)
 
 
 -- VIEW
@@ -51,12 +57,18 @@ view address model =
 
 seatItem : Signal.Address Action -> Seat -> Html
 seatItem address seat =
-  li [ class "seat available", onClick address (RequestSeat seat) ] [ text (toString seat.seatNo) ]
+  let
+    occupiedClass = if seat.occupied then "occupied" else "available"
+  in
+    li [ class ("seat " ++ occupiedClass), onClick address (RequestSeat seat) ] [ text (toString seat.seatNo) ]
 
 
 -- PORTS
 
-port seatList : Signal Model
+port seatLists : Signal Model
+
+
+port seatUpdates : Signal Seat
 
 
 port seatRequests : Signal Seat
@@ -68,7 +80,17 @@ port seatRequests =
 
 incomingActions: Signal Action
 incomingActions =
-  Signal.map SetSeats seatList
+  Signal.merge seatListsToSet seatsToUpdate
+
+
+seatListsToSet: Signal Action
+seatListsToSet =
+  Signal.map SetSeats seatLists
+
+
+seatsToUpdate: Signal Action
+seatsToUpdate =
+  Signal.map UpdateSeat seatUpdates
 
 
 seatRequestsBox : Signal.Mailbox Seat
