@@ -27,7 +27,7 @@ initialModel =
 
 -- UPDATE
 
-type Action = NoOp | Refresh Model
+type Action = NoOp | SetSeats Model
 
 
 update : Action -> Model -> (Model, Effects Action)
@@ -35,7 +35,7 @@ update action model =
   case action of
     NoOp ->
       (model, Effects.none)
-    Refresh seats ->
+    SetSeats seats ->
       (seats, Effects.none)
 
 
@@ -53,14 +53,14 @@ seatItem address seat =
 
 -- PORTS
 
-port initialSeats : Signal Model
+port seatLists : Signal Model
 
 
 -- SIGNAL
 
 incomingActions: Signal Action
 incomingActions =
-  Signal.map Refresh initialSeats
+  Signal.map SetSeats seatLists
 
 
 -- WIRING
