@@ -31,4 +31,8 @@ channel.join()
 
 elmApp.ports.seatRequests.subscribe(seat => {
   console.log('Requesting seat: ', seat)
+  channel.push("request_seat", seat)
+         .receive("error", payload => console.log(payload.message)
 })
+
+channel.on("updated", seat => console.log('updated seat: ', seat))
