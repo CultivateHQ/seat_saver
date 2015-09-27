@@ -21,8 +21,8 @@ type alias Model =
   List Seat
 
 
-initialModel : (Model, Effects Action)
-initialModel =
+init : (Model, Effects Action)
+init =
   ([], Effects.none)
 
 
@@ -112,7 +112,7 @@ sendSeatRequest seat =
 app : App Model
 app =
   StartApp.start
-    { init = initialModel
+    { init = init
     , update = update
     , view = view
     , inputs = [incomingActions]
