@@ -1,7 +1,8 @@
 module SeatSaver where
 
 import Html exposing (..)
-import Html.Attributes exposing (..)
+import Html.Attributes exposing (class)
+import Html.Events exposing (onClick)
 
 import StartApp exposing (App)
 import Effects exposing (Effects, Never)
@@ -27,7 +28,7 @@ initialModel =
 
 -- UPDATE
 
-type Action = NoOp | SetSeats Model
+type Action = NoOp | SetSeats Model | RequestSeat Seat
 
 
 update : Action -> Model -> (Model, Effects Action)
@@ -37,6 +38,8 @@ update action model =
       (model, Effects.none)
     SetSeats seats ->
       (seats, Effects.none)
+    RequestSeat seat ->
+      (model, sendSeatRequest seat)
 
 
 -- VIEW
@@ -48,19 +51,37 @@ view address model =
 
 seatItem : Signal.Address Action -> Seat -> Html
 seatItem address seat =
-  li [ class "seat available" ] [ text (toString seat.seatNo) ]
+  li [ class "seat available", onClick address (RequestSeat seat) ] [ text (toString seat.seatNo) ]
 
 
 -- PORTS
 
-port seatLists : Signal Model
+port seatList : Signal Model
+
+
+port seatRequests : Signal Seat
+port seatRequests =
+  seatRequestsBox.signal
 
 
 -- SIGNAL
 
 incomingActions: Signal Action
 incomingActions =
-  Signal.map SetSeats seatLists
+  Signal.map SetSeats seatList
+
+
+seatRequestsBox : Signal.Mailbox Seat
+seatRequestsBox =
+  Signal.mailbox (Seat 0 False)
+
+
+-- EFFECTS
+sendSeatRequest : Seat -> Effects Action
+sendSeatRequest seat =
+  Signal.send seatRequestsBox.address seat
+    |> Effects.task
+    |> Effects.map (always NoOp)
 
 
 -- WIRING
