@@ -99,6 +99,7 @@ seatRequestsBox =
 
 
 -- EFFECTS
+
 sendSeatRequest : Seat -> Effects Action
 sendSeatRequest seat =
   Signal.send seatRequestsBox.address seat
