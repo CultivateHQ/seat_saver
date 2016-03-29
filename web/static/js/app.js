@@ -18,6 +18,18 @@ import "phoenix_html"
 // Local files can be imported directly using relative
 // paths "./socket" or full ones "web/static/js/socket".
 
-// import socket from "./socket"
+import socket from "./socket"
+
 var elmDiv = document.getElementById('elm-main')
-  , elmApp = Elm.embed(Elm.SeatSaver, elmDiv);
+  , initialState = {seatLists: []}
+  , elmApp = Elm.embed(Elm.SeatSaver, elmDiv, initialState);
+
+let channel = socket.channel("seats:planner", {})
+channel.join()
+  .receive("ok", resp => { console.log("Joined successfully", resp) })
+  .receive("error", resp => { console.log("Unable to join", resp) })
+
+channel.on('set_seats', data => {
+  console.log('got seats', data.seats)
+  elmApp.ports.seatLists.send(data.seats)
+})
