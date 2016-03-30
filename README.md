@@ -35,6 +35,20 @@ See below for gotchas.
 [13. Booking a seat](http://www.cultivatehq.com/posts/phoenix-elm-13)
 
 
+## Running the app without going through the tutorials
+
+Maybe you'd like to just clone this repo and see it in action without going through the tutorials. In that case, check out the [Setup post](http://www.cultivatehq.com/posts/phoenix-elm-1) to install the requirements and then do the following:
+
+```shell
+git clone git@github.com:cultivatehq/seat_saver.git
+cd seat_saver
+mix deps.get
+npm install
+mix ecto.create && mix ecto.migrate && mix run priv/repo/seeds.exs
+iex -S mix phoenix.server
+```
+
+
 ### Gotchas
 
 ##### Help! My Elm file won't stop compiling! (Hat tip to @scrogson)
