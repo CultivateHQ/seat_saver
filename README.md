@@ -63,6 +63,12 @@ iex -S mix phoenix.server
 
 ### Gotchas
 
+##### [Windows] Uncaught ReferenceError: Elm is not defined (submitted by @ramstein74)
+
+Have a look at [this issue](https://github.com/CultivateHQ/seat_saver/issues/9).
+
+TL;DR - in your *brunch-config.json* file change any file paths in the `elmBrunch` plugin config to use `\/` instead of `/` as path separators.
+
 ##### Help! My Elm file won't stop compiling! (Hat tip to @scrogson)
 
 If you put your *elm* folder in the *web/static* folder it can cause a cascade compile when you run the Phoenix server (i.e. the first compile will trigger another compile, which will trigger another compile etc.). This is because the *web/static* folder is watched by Brunch by default (although you can change this if you want to). Sticking to using the *web* folder (i.e. *web/elm*) as we do in the tutorial for an easy life. See [part 2](http://www.cultivatehq.com/posts/phoenix-elm-2) for more info.
